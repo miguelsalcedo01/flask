@@ -1,16 +1,15 @@
 pipeline {
     agent any
-    environment{
-        DOCKER = credentials('Docker')
-    }
+
+
     stages {
-        stage('Build'){
+        stage('Login and Push'){
             steps {
-                sh 'docker build -t msalcedo1/flask'
-            }
-        }stage('login'){
-            steps {
-                echo '$DOCKER' | docker login -u msalcedo1 --password-stdin'
+                script{
+                    withDockerRegistry(credentialsId: 'Docker') {
+                        docker.build('msalcedo1/flaskapp').push('latest')
+                    }
+                }
             }
         }
     }
