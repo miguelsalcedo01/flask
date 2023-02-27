@@ -1,11 +1,9 @@
-FROM python:3.8-slim-buster
+FROM jenkins/jenkins:latest
+USER root
+RUN apt update && apt-get install zip -y && apt-get install curl -y
 
-WORKDIR  /app
-
-COPY . .
-
-RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awsliv2.zip" && unzip awscliv2.zip
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && unzip awscliv2.zip
 RUN ./aws/install
-RUN pip install -r requirements.txt
 
-CMD ["python", "-n" "flask" "run" "--host=0.0.0.0"]
+RUN curl -sSL https://get.docker.com/ | sh
+USER jenkins
